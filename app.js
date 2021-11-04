@@ -27,7 +27,6 @@ app.use(methodOverride('_method'))
 app.use(routes)
 
 
-
 app.listen(PORT, () => {
-  console.log(`This is listening on http://localhost:${port}`)
+  console.log(`This is listening on http://localhost:${PORT}`)
 })
