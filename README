@@ -1,0 +1,33 @@
+老爸的私房錢-記帳本
+
+透過 Express 框架和 Mongodb 的運用，建立使用者可以新增、刪除、修改、查詢
+帳目的 web app，同時也將專案上傳 Heroku 供外部使用。
+
+功能
+使用者可以增加一筆支出
+使用者可以刪除一筆支出
+使用者可以編輯任何一筆支出
+使用者可以查看所有記錄的支出
+清單顯示所有支出的總金額
+可依照類別篩選支出項目
+
+環境
+Node.js v12.22.7
+express 4.17.1
+express-handlebars 5.3.4
+mongoose v5.13.13
+mongodb v4.2.14
+method-override v3.0.0
+
+安裝
+開啟終端機(Terminal)將此專案Clone至本機電腦
+git clone https://github.com/Kemal-Wuzhi/expense-tracker.git
+進入存放此專案的資料夾
+cd expense-tracker
+安裝 npm 套件
+npm install
+加入種子資料
+npm run seed
+啟動網頁伺服器
+npm run dev
+在任一瀏覽器中輸入 http://localhost:3000 使用本專案
