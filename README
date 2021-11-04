@@ -19,15 +19,20 @@ mongoose v5.13.13
 mongodb v4.2.14
 method-override v3.0.0
 
-安裝
-開啟終端機(Terminal)將此專案Clone至本機電腦
+
+-安裝-
 git clone https://github.com/Kemal-Wuzhi/expense-tracker.git
-進入存放此專案的資料夾
+
+-進入存放此專案的資料夾-
 cd expense-tracker
-安裝 npm 套件
+
+-安裝 npm 套件-
 npm install
-加入種子資料
+
+-加入種子資料-
 npm run seed
-啟動網頁伺服器
+
+-啟動網頁伺服器-
 npm run dev
-在任一瀏覽器中輸入 http://localhost:3000 使用本專案
+
+-在任一瀏覽器中輸入 http://localhost:3000 使用本專案-
