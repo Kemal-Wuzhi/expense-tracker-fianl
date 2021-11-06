@@ -1,13 +1,12 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
-const routes = require('./routes')
 const ifEqual = require('./tools/handlebarshelpers')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-
+const routes = require('./routes')
 const session = require('express-session')
 const flash = require('connect-flash')
 const usePassport = require('./config/passport')

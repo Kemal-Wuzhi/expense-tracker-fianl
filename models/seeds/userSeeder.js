@@ -1,12 +1,10 @@
 const bcrypt = require('bcryptjs')
+const User = require('../user')
+const db = require('../../config/mongoose')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-
-const User = require('../user')
-
-const db = require('../../config/mongoose')
 
 const SEED_USERS = [{
     name: '野原廣志',
@@ -24,7 +22,7 @@ db.once('open', () => {
   Promise
     .all(Array.from(
       SEED_USERS,
-      SEE_USER => {
+      SEED_USER => {
         return bcrypt
           .genSalt(10)
           .then(salt => bcrypt.hash(SEED_USER.password, salt))
@@ -36,7 +34,7 @@ db.once('open', () => {
       }
     ))
     .then(() => {
-      console.log('SEED_USERS is done.')
+      console.log('SEED_USERSdone.')
       process.exit()
     })
     .catch(err => console.error(err))

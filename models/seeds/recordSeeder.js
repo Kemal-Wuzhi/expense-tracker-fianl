@@ -1,41 +1,59 @@
-const Category = require('../category')
 const User = require('../user')
+const Category = require('../category')
 const Record = require('../record')
 
-const users = require('./user.json').users
-const records = require('./record.json').records
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const db = require('../../config/mongoose')
-const bcrypt = require('bcryptjs')
 
-db.once('open', async () => {
-  await users.forEach(user => {
-    bcrypt
-      .genSalt(10)
-      .then(salt => bcrypt.hash(user.password, salt))
-      .then(hash => User.create({
-        name: user.name,
-        email: user.email,
-        password: hash
-      }))
-  })
-  await records.forEach(async record => {
-    const recordCategory = await Category.findOne({
-      name: record.category
-    }).lean()
+const SEED_RECORDS = [{
+    name: "晚餐",
+    category: "餐飲食品",
+    date: "2021-01-30",
+    amount: 300,
+    user: "野原美冴"
+  },
+  {
+    "name": "房貸",
+    "category": "家居物業",
+    "date": "2021-05-05",
+    "amount": 25000,
+    "user": "野原廣志"
+  }
+]
 
-    const recordUser = await User.findOne({
-      name: record.user
-    }).lean()
-
-    Record.create({
-      userId: recordUser._id,
-      name: record.name,
-      date: record.date,
-      amount: record.amount,
-      categoryId: recordCategory._id
+db.once('open', () => {
+  Promise
+    .all(Array.from(
+      SEED_RECORDS,
+      SEED_RECORD => {
+        return User
+          .findOne({
+            name: SEED_RECORD.user
+          })
+          .then(user => user._id)
+          .then(userId => {
+            return Category
+              .findOne({
+                name: SEED_RECORD.category
+              })
+              .then(category => category._id)
+              .then(categoryId => {
+                return Record.create({
+                  ...SEED_RECORD,
+                  userId,
+                  categoryId
+                })
+              })
+          })
+          .catch(err => console.error(err))
+      }
+    ))
+    .then(() => {
+      console.log('SEED_RECORDSdone.')
+      process.exit()
     })
-  })
-
-  console.log('recordSeeder done!')
+    .catch(err => console.error(err))
 })
