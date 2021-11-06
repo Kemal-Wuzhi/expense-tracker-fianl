@@ -4,7 +4,7 @@ const FacebookStrategy = require('passport-facebook').Strategy
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 
-moudle.exports = app => {
+module.exports = app => {
   app.user(passport.initialize())
   app.user(passport.session())
 
@@ -42,7 +42,7 @@ moudle.exports = app => {
     clientSecret: process.env.FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK,
     profileFields: ['email', 'displayName']
-  }, (acessToken, refreshToken, profile, done) => {
+  }, (accessToken, refreshToken, profile, done) => {
     const {
       name,
       email
