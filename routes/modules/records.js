@@ -2,9 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Record = require('../../models/record')
 const Category = require('../../models/category')
-const {
-  route
-} = require('..')
+
 
 //add
 router.get('/new', (req, res) => {
@@ -23,12 +21,14 @@ router.get('/new', (req, res) => {
 
 router.post('/', (req, res) => {
   const {
+    userId,
     name,
     date,
     category,
     amount
   } = req.body
   Record.create({
+      userId,
       name,
       date,
       category,
@@ -40,8 +40,9 @@ router.post('/', (req, res) => {
 
 //delete
 router.delete('/:id', (req, res) => {
+  const userId = req.user._id
   const id = req.params.id
-  return Record.findById(id)
+  return Record.findById(id, userId)
     .then(record => record.remove())
     .then(() => {
       res.redirect('/')
@@ -51,11 +52,12 @@ router.delete('/:id', (req, res) => {
 
 //edit
 router.get('/:id/edit', async (req, res) => {
+  const userId = req.user._id
   const id = req.params.id
   const categoryList = await Category.find().sort({
     _id: 'asc'
   }).lean()
-  return Record.findById(id)
+  return Record.findById(id, userId)
     .lean()
     .then((record) => res.render('edit', {
       record,
@@ -65,6 +67,7 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
+
   const id = req.params.id
   const {
     name,
