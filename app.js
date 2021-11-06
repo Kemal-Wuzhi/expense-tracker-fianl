@@ -17,9 +17,6 @@ const PORT = process.env.PORT || 3000
 require('./config/mongoose')
 
 
-
-
-
 app.engine('hbs', exphbs({
   defaultLayout: 'main',
   extname: '.hbs',
@@ -29,12 +26,31 @@ app.engine('hbs', exphbs({
 }))
 app.set('view engine', 'hbs')
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true
+  })
+)
+
 app.use(express.urlencoded({
   extended: true
 }))
 app.use(methodOverride('_method'))
-app.use(routes)
 
+app.use(flash())
+usePassport(app)
+//check again
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.warning_msg = req.flash('warning_msg')
+  next()
+})
+
+app.use(routes)
 
 app.listen(PORT, () => {
   console.log(`This is listening on http://localhost:${PORT}`)
