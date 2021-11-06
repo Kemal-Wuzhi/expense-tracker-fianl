@@ -36,7 +36,7 @@ db.once('open', () => {
       }
     ))
     .then(() => {
-      consolo.log('SEED_USERS is done.')
+      console.log('SEED_USERS is done.')
       process.exit()
     })
     .catch(err => console.error(err))

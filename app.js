@@ -11,10 +11,11 @@ if (process.env.NODE_ENV !== 'production') {
 const session = require('express-session')
 const flash = require('connect-flash')
 const usePassport = require('./config/passport')
+require('./config/mongoose')
 
 const app = express()
-const PORT = process.env.PORT || 3000
-require('./config/mongoose')
+const PORT = process.env.PORT
+
 
 
 app.engine('hbs', exphbs({

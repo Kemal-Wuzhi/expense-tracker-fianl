@@ -5,8 +5,8 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 
 module.exports = app => {
-  app.user(passport.initialize())
-  app.user(passport.session())
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   passport.use(new LocalStrategy({
     usernameField: 'email',
