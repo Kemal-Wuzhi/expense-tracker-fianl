@@ -1,14 +1,13 @@
 <div class="container">
   <div name="filter-form" class="col-auto mr-auto">
     <form action="/filter" method="GET">
-      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: 80%"
-        onchange="submit()" name="categorySelector">
-
-        <option>Select</option>
-        {{#each categoryList}}
-        <option value="{{this.title}}" {{#ifEqual this.title ../categorySelector}}selected{{/ifEqual}}>{{this.title}}
-        </option>
-        {{/each}}
+      <select class="custom-select" name="category" id="category" onchange="this.form.submit();">
+        <option value="">全部</option>
+        <option value="家居物業" {{#if (isEqual category "家居物業" )}}selected{{/if}}>家居物業</option>
+        <option value="交通出行" {{#if (isEqual category "交通出行" )}}selected{{/if}}>交通出行</option>
+        <option value="休閒娛樂" {{#if (isEqual category "休閒娛樂" )}}selected{{/if}}>休閒娛樂</option>
+        <option value="餐飲食品" {{#if (isEqual category "餐飲食品" )}}selected{{/if}}>餐飲食品</option>
+        <option value="其他" {{#if (isEqual category "其他" )}}selected{{/if}}>其他</option>
       </select>
     </form>
   </div>
