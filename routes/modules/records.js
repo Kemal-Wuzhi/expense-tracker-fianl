@@ -1,91 +1,93 @@
 const express = require('express')
 const router = express.Router()
-const Record = require('../../models/record')
 const Category = require('../../models/category')
+const Record = require('../../models/record')
+const moment = require('moment')
 
-//add
 router.get('/new', (req, res) => {
-  Category.find()
-    .lean()
-    .sort({
-      _id: 'asc'
-    })
-    .then((categoryList) => {
-      res.render('new', {
-        categoryList
-      })
-    })
-    .catch((error) => console.log(error))
+  const todayDate = moment().format('YYYY-MM-DD')
+
+  return res.render('new', {
+    todayDate
+  })
 })
 
 router.post('/', (req, res) => {
-  const {
-    userId,
-    name,
-    date,
-    category,
-    amount
-  } = req.body
-  Record.create({
-      userId,
-      name,
-      date,
-      category,
-      amount
+  const userId = req.user._id
+  const category = req.body.category
+
+  return Category
+    .findOne({
+      name: category
+    })
+    .then(category => category._id)
+    .then(categoryId => {
+      return Record
+        .create({
+          ...req.body,
+          userId,
+          categoryId
+        })
     })
     .then(() => res.redirect('/'))
-    .catch((error) => console.log(error))
+    .catch(err => console.error(err))
 })
 
-//delete
-router.delete('/:id', (req, res) => {
+router.get('/:id/edit', (req, res) => {
   const userId = req.user._id
-  const id = req.params.id
-  return Record.findById(id, userId)
-    .then(record => record.remove())
-    .then(() => {
-      res.redirect('/')
+  const _id = req.params.id
+
+  return Record
+    .findOne({
+      _id,
+      userId
     })
-    .catch((error) => console.log(error))
-})
-
-//edit
-router.get('/:id/edit', async (req, res) => {
-  const userId = req.user._id
-  const id = req.params.id
-  const categoryList = await Category.find().sort({
-    _id: 'asc'
-  }).lean()
-  return Record.findById(id, userId)
     .lean()
-    .then((record) => res.render('edit', {
-      record,
-      categoryList
-    }))
-    .catch((error) => console.log(error))
+    .populate('categoryId')
+    .then(record => {
+      record.date = moment(record.date).format('YYYY-MM-DD')
+      return res.render('edit', {
+        record
+      })
+    })
+    .catch(err => console.error(err))
 })
 
 router.put('/:id', (req, res) => {
+  const userId = req.user._id
+  const _id = req.params.id
+  const category = req.body.category
 
-  const id = req.params.id
-  const {
-    name,
-    date,
-    category,
-    amount
-  } = req.body
-  return Record.findById(id)
-    .then((record) => {
-      record.name = name
-      record.date = date
-      record.category = category
-      record.amount = amount
-      return record.save()
+  return Category
+    .findOne({
+      name: category
     })
-    .then(() => {
-      res.redirect('/')
+    .then(category => category._id)
+    .then(categoryId => {
+      return Record
+        .findOneAndUpdate({
+          _id,
+          userId
+        }, {
+          ...req.body,
+          categoryId
+        })
     })
-    .catch((error) => console.log(error))
+    .then(() => res.redirect('/'))
+    .catch(err => console.error(err))
+})
+
+router.delete('/:id', (req, res) => {
+  const userId = req.user._id
+  const _id = req.params.id
+
+  return Record
+    .findOneAndDelete({
+      _id,
+      userId
+    })
+    .then(() => res.redirect('/'))
+    .catch(err => console.error(err))
 })
 
 module.exports = router

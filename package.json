@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.3.4",
     "express-session": "^1.17.2",
+    "handlebars-helper-equal": "^1.0.0",
     "handlebars-helpers": "^0.10.0",
     "highlight": "^0.2.4",
     "highlight.js": "^11.3.1",

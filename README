@@ -12,7 +12,7 @@
 可依照類別篩選支出項目
 
 環境
-Node.js v12.22.7
+Node.js v13.14.0
 express 4.17.1
 express-handlebars 5.3.4
 mongoose v5.13.13
@@ -36,4 +36,4 @@ npm run seed
 npm run dev
 
 -在任一瀏覽器中輸入 http://localhost:3000 使用本專案-
-a
+

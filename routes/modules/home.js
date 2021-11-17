@@ -1,61 +1,75 @@
 const express = require('express')
 const router = express.Router()
-const Record = require('../../models/record')
 const Category = require('../../models/category')
+const Record = require('../../models/record')
+const moment = require('moment')
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   const userId = req.user._id
 
-  const categoryList = await Category.find().lean().sort({
-    _id: 'asc'
-  })
-
-  const records = await Record.find().lean().sort({
-    date: 'desc',
-    _id: 'desc'
-  })
-
-  let totalAmount = 0
-  for (let record of records) {
-    totalAmount += record.amount
-  }
-
-  res.render('index', {
-    totalAmount,
-    records,
-    categoryList
-  })
-})
-
-router.get('/filter', async (req, res) => {
-  const userId = req.user._id
-
-  const categoryList = await Category.find().sort({
-    _id: 'asc'
-  }).lean()
-
-  const {
-    categorySelector
-  } = req.query
-
-  const records = await Record.find({
-      category: categorySelector
+  return Record
+    .find({
+      userId
     })
     .lean()
+    .populate('categoryId')
     .sort({
-      _id: 'desc'
+      date: 'desc'
     })
-  let totalAmount = 0
-  for (let record of records) {
-    totalAmount += record.amount
+    .then(records => {
+      let totalAmount = 0
+      records.forEach(record => {
+        record.date = moment(record.date).format('YYYY-MM-DD')
+        totalAmount += record.amount
+      })
+      return res.render('index', {
+        records,
+        totalAmount
+      })
+    })
+    .catch(err => console.error(err))
+})
+
+router.get('/search', (req, res) => {
+  const category = req.query.category
+
+  if (category === '') {
+    return res.redirect('/')
   }
 
-  res.render('index', {
-    totalAmount,
-    records,
-    categoryList,
-    categorySelector
-  })
+  const userId = req.user._id
+
+  return Category
+    .findOne({
+      name: category
+    })
+    .then(category => category._id)
+    .then(categoryId => {
+      Record
+        .find({
+          userId,
+          categoryId
+        })
+        .lean()
+        .populate('categoryId')
+        .sort({
+          date: 'asc'
+        })
+        .then(records => {
+          let totalAmount = 0
+          records.forEach(record => {
+            record.date = moment(record.date).format('YYYY-MM-DD')
+            totalAmount += record.amount
+          })
+          return res.render('index', {
+            records,
+            totalAmount,
+            category
+          })
+        })
+        .catch(err => console.error(err))
+    })
+    .catch(err => console.error(err))
 })
 
 module.exports = router

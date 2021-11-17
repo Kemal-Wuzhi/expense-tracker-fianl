@@ -1,0 +1,58 @@
+{
+  "category": [
+    {
+      "name": "家居物業",
+      "icon": "fas fa-home"
+    },
+    {
+      "name": "交通出行",
+      "icon": "fas fa-shuttle-van"
+    },
+    {
+      "name": "休閒娛樂",
+      "icon": "fas fa-grin-beam"
+    },
+    {
+      "name": "餐飲食品",
+      "icon": "fas fa-utensils"
+    },
+    {
+      "name": "其他",
+      "icon": "fas fa-pen"
+    }
+  ],
+  "records": [
+    {
+      "id": 1,
+      "name": "PS5盤子版",
+      "date": "2021-09-30",
+      "amount": "30000",
+      "category": "休閒娛樂",
+      "user": "user1"
+    },
+    {
+      "id": 8,
+      "name": "鐵板燒",
+      "date": "2021-10-22",
+      "amount": "500",
+      "category": "餐飲食品",
+      "user": "user2"
+    }
+  ],
+    
+  "users": [
+    {
+      "name": "user1",
+      "email": "user1@example.com",
+      "password": "12345678"
+    },
+    {
+      "name": "user2",
+      "email": "user2@example.com",
+      "password": "12345678"
+    }
+  ]
+}
+  
+
+

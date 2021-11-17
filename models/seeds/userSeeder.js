@@ -22,19 +22,19 @@ db.once('open', () => {
   Promise
     .all(Array.from(
       SEED_USERS,
-      SEED_USER => {
+      SEED_USERS => {
         return bcrypt
           .genSalt(10)
           .then(salt => bcrypt.hash(SEED_USER.password, salt))
           .then(hash => User.create({
-            name: SEED_USER.name,
-            email: SEED_USER.email,
+            name: SEED_USERS.name,
+            email: SEED_USERS.email,
             password: hash
           }))
       }
     ))
     .then(() => {
-      console.log('SEED_USERSdone.')
+      console.log('done.')
       process.exit()
     })
     .catch(err => console.error(err))
