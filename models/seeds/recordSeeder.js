@@ -36,5 +36,4 @@ db.once('open', async () => {
   })
 
   console.log('recordSeeder created!')
-  console.log('press ^C to quit.')
 })
